@@ -1,0 +1,15 @@
+$schema: "1.0"
+name: "git-clone"
+description: "This definition install git and clones a git repo"
+
+tasks:
+  - name: ~/winget
+    description: Install Git
+    parameters:
+      package:  Git.Git
+
+userTasks:
+  - name: ~/powershell
+    parameters:
+      command: |
+        git clone https://github.com/microsoft/devcenter-catalog

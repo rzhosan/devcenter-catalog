@@ -1,0 +1,19 @@
+$schema: "1.0"
+name: "vscode-intall"
+description: "This definition installs vscode"
+
+tasks:
+  - name: ~/winget
+    description: Install AZD
+    parameters:
+      package:  Microsoft.Azd
+
+  - name: ~/winget
+    description: Install Visual Studio Code
+    parameters:
+      package:  Microsoft.VisualStudioCode
+
+  - name: ~/powershell
+    parameters:
+      command: |
+        $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') 
