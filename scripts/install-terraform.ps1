@@ -3,7 +3,7 @@ $TerraformVersion = "1.8.0"
 $InstallPath = "C:\dev"
 $TerraformZip = "$InstallPath\terraform.zip"
 $TerraformExe = "$InstallPath\terraform.exe"
-$TerraformURL = "https://releases.hashicorp.com/terraform/$TerraformVersion/terraform_${TerraformVersion}_windows_amd64.zip"
+$TerraformURL = "https://releases.hashicorp.com/terraform/$TerraformVersion/terraform_${TerraformVersion}_windows_386.zip"
 
 # Create the installation directory if it doesn't exist
 if (!(Test-Path $InstallPath)) {
@@ -12,7 +12,7 @@ if (!(Test-Path $InstallPath)) {
 
 # Download Terraform
 Write-Host "Downloading Terraform v$TerraformVersion..."
-Invoke-WebRequest -Uri $TerraformURL -OutFile $TerraformZip
+curl $TerraformURL --output $TerraformZip
 
 # Extract Terraform binary
 Write-Host "Extracting Terraform..."
