@@ -10,6 +10,9 @@ tasks:
       url: https://packages.chocolatey.org/azure-cli.2.70.0.nupkg
 
 # terraform: https://packages.chocolatey.org/terraform.1.8.0.nupkg
+# openjdk: https://packages.chocolatey.org/openjdk.22.0.2.nupkg
+# wsl2: https://packages.chocolatey.org/wsl2.2.4.11.nupkg
+# wsl-ubuntu: https://packages.chocolatey.org/wsl-ubuntu-2204.22.4.0.20220819.nupkg
 
 userTasks:
   - name: ~/powershell
