@@ -96,7 +96,7 @@ function Install-Package
     $packageLocationPath = [System.IO.Path]::GetTempPath()
 
     if ($Url) {
-        $fileName = Split-Path -Lead $Url
+        $fileName = Split-Path -Leaf $Url
         Write-Host "Downloading $Url to $packageLocationPat\$fileName"
         curl $Url --output "$packageLocationPath\$fileName"
         $expression = "$expression --source $packageLocationPath"
