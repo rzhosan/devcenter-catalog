@@ -10,7 +10,10 @@ param(
     [string] $Switches,
   
     [Parameter()]
-    [string] $IgnoreChecksums
+    [string] $IgnoreChecksums,
+
+    [Parameter()]
+    [string] $Url
 )
 
 if (-not $Package) {
@@ -67,7 +70,8 @@ function Install-Package
         [string] $Package,
         [string] $Version,
         [string] $Switches,        
-        [string] $IgnoreChecksums
+        [string] $IgnoreChecksums,
+        [string] $Url
     )
 
     $expression = "$ChocoExePath install $Package"
@@ -86,6 +90,14 @@ function Install-Package
         $expression = "$expression --ignorechecksums"
     }
 
+    $packageLocationPath = [System.IO.Path]::GetTempFileName()
+
+    if ($Url) {
+        Write-Host "Downloading $Link to $packageLocationPath"
+        curl $Link --output $packageLocationPath
+        $expression = "$expression --source $packageLocationPath"
+    }
+
     $expression = "$expression `nexit `$LASTEXITCODE"
 
     Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -95,6 +107,7 @@ function Install-Package
 
     Execute -File $packageScriptPath
     Remove-Item $packageScriptPath
+    Remove-Item $packageLocationPath
 }
 
 function Execute
@@ -146,6 +159,6 @@ Ensure-Chocolatey -ChocoExePath "$Choco"
 
 Write-Host "Preparing to install Chocolatey package: $Package."
 Write-Host "Command: $Choco -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums" 
-Install-Package -ChocoExePath "$Choco" -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums
+Install-Package -ChocoExePath "$Choco" -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums -Url $Url
 
 Write-Host "`nThe artifact was applied successfully.`n"

@@ -4,8 +4,13 @@ $schema: "1.0"
 name: choco
 description: Installs a Chocolatey package.
 author: Microsoft Corporation
-command: "./Choco.ps1 -Package {{package}} -Version {{version}} -Switches {{switches}} -IgnoreChecksums {{ignoreChecksums}}"
+command: "./Choco.ps1 -Package {{package}} -Version {{version}} -Switches {{switches}} -IgnoreChecksums {{ignoreChecksums}} -Url {{url}}"
 parameters:
+  url:
+    default: ""
+    type: string
+    required: false
+    description: The URL to the Chocolatey package.
   package:
     default: ""
     type: string
