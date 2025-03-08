@@ -4,9 +4,12 @@ description: "This definition install git and clones a git repo"
 
 tasks:
   - name: ~/winget
-    description: Install Git
+    description: Install AzureCLI
     parameters:
-      package:  Git.Git
+      package:  azure-cli
+      url: https://packages.chocolatey.org/azure-cli.2.70.0.nupkg
+
+# terraform: https://packages.chocolatey.org/terraform.1.8.0.nupkg
 
 userTasks:
   - name: ~/powershell
