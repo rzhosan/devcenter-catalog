@@ -111,7 +111,6 @@ function Install-Package
 
     Execute -File $packageScriptPath
     Remove-Item $packageScriptPath
-    Remove-Item -Path $packageLocationPath -Recurse -Force
 }
 
 function Execute
