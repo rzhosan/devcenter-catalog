@@ -4,7 +4,7 @@ $schema: "1.0"
 name: choco
 description: Installs a Chocolatey package.
 author: Microsoft Corporation
-command: "./Choco.ps1 -Package {{package}} -Version {{version}} -Switches {{switches}} -IgnoreChecksums {{ignoreChecksums}} -Url {{url}}"
+command: "./Choco.ps1 -Package {{package}} -Version {{version}} -Switches {{switches}} -IgnoreChecksums {{ignoreChecksums}} -Url {{url}} -BypassProxy {{bypassProxy}}"
 parameters:
   url:
     default: ""
@@ -29,12 +29,17 @@ parameters:
     default: ""
     type: string
     required: false
-    description: Additional params required for the package to install.  
+    description: Additional params required for the package to install.
   ignoreChecksums:
     default: false
     type: boolean
     required: false
     description: Whether to ignore checksums when installing the package.
+  bypassProxy:
+    default: false
+    type: boolean
+    required: false
+    description: Whether to bypass the system proxy.
 documentation:
   notes: This task is used to install a Chocolatey package.
   examples:

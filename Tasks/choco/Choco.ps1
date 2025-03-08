@@ -13,7 +13,10 @@ param(
     [string] $IgnoreChecksums,
 
     [Parameter()]
-    [string] $Url
+    [string] $Url,
+
+    [Parameter()]
+    [string] $BypassProxy
 )
 
 if (-not $Package) {
@@ -90,11 +93,12 @@ function Install-Package
         $expression = "$expression --ignorechecksums"
     }
 
-    $packageLocationPath = [System.IO.Path]::GetTempFileName()
+    $packageLocationPath = [System.IO.Path]::GetTempPath()
 
     if ($Url) {
-        Write-Host "Downloading $Link to $packageLocationPath"
-        curl $Link --output $packageLocationPath
+        $fileName = Split-Path -Lead $Url
+        Write-Host "Downloading $Url to $packageLocationPat\$fileName"
+        curl $Url --output "$packageLocationPath\$fileName"
         $expression = "$expression --source $packageLocationPath"
     }
 
@@ -157,8 +161,24 @@ function Execute
 Write-Host 'Ensuring latest Chocolatey version is installed.'
 Ensure-Chocolatey -ChocoExePath "$Choco"
 
-Write-Host "Preparing to install Chocolatey package: $Package."
-Write-Host "Command: $Choco -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums" 
-Install-Package -ChocoExePath "$Choco" -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums -Url $Url
+if ($BypassProxy -eq "true") {
+    Write-Host 'Bypassing proxy settings for this installation.'
+    (Get-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFile.ps1') -replace 'New-Object System.Net.WebClient', 'New-Object System.Net.WebClient; $webclient.Proxy = $null' | Set-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFile.ps1';
+    (Get-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFileName.ps1') -replace 'New-Object System.Net.WebClient', 'New-Object System.Net.WebClient; $client.Proxy = $null' | Set-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFileName.ps1';
+    (Get-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebHeaders.ps1') -replace 'New-Object System.Net.WebClient', 'New-Object System.Net.WebClient; $client.Proxy = $null' | Set-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebHeaders.ps1';
+}
 
-Write-Host "`nThe artifact was applied successfully.`n"
+try {
+    Write-Host "Preparing to install Chocolatey package: $Package."
+    Write-Host "Command: $Choco -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums" 
+    Install-Package -ChocoExePath "$Choco" -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums -Url $Url
+
+    Write-Host "`nThe artifact was applied successfully.`n"
+} finally {
+    if ($BypassProxy -eq "true") {
+        Write-Host 'Restoring proxy settings for this installation.'
+        (Get-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFile.ps1') -replace '; \$webclient.Proxy = \$null', '' | Set-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFile.ps1';
+        (Get-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFileName.ps1') -replace '; \$client.Proxy = \$null', '' | Set-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebFileName.ps1';
+        (Get-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebHeaders.ps1') -replace '; \$client.Proxy = \$null', '' | Set-Content 'C:\ProgramData\chocolatey\helpers\functions\Get-WebHeaders.ps1';
+    }
+}
