@@ -1,9 +1,9 @@
-$TerraformVersion = "1.8.0"
-$InstallPath = "C:\dev"
+$TerraformVersion = '1.8.0'
+$InstallPath = 'C:\dev'
 
-$TerraformZip = "$InstallPath\terraform.zip"
-$TerraformExe = "$InstallPath\terraform.exe"
-$TerraformURL = "https://releases.hashicorp.com/terraform/$TerraformVersion/terraform_${TerraformVersion}_windows_386.zip"
+$TerraformZip = '$InstallPath\terraform.zip'
+$TerraformExe = '$InstallPath\terraform.exe'
+$TerraformURL = 'https://releases.hashicorp.com/terraform/$TerraformVersion/terraform_${TerraformVersion}_windows_386.zip'
 
 curl $TerraformURL --output $TerraformZip
 Expand-Archive -Path $TerraformZip -DestinationPath $InstallPath -Force
