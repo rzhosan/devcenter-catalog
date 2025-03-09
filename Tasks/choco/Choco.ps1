@@ -96,9 +96,9 @@ function Install-Package
     $packageLocationPath = [System.IO.Path]::GetTempPath()
 
     if ($Url) {
-        $fileName = Split-Path -Leaf $Url
-        Write-Host "Downloading $Url to $packageLocationPat\$fileName"
-        curl $Url --output "$packageLocationPath\$fileName"
+        $fileName = Split-Path -Leaf "$Url"
+        Write-Host "Downloading $Url to $packageLocationPat$fileName"
+        Invoke-WebRequest -Uri "$Url" -OutFile "$packageLocationPath$fileName"
         $expression = "$expression --source $packageLocationPath"
     }
 
@@ -170,7 +170,7 @@ if ($BypassProxy -eq "true") {
 try {
     Write-Host "Preparing to install Chocolatey package: $Package."
     Write-Host "Command: $Choco -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums" 
-    Install-Package -ChocoExePath "$Choco" -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums -Url $Url
+    Install-Package -ChocoExePath "$Choco" -Package $Package -Version $Version -Switches $Switches -IgnoreChecksums $IgnoreChecksums -Url "$Url"
 
     Write-Host "`nThe artifact was applied successfully.`n"
 } finally {
