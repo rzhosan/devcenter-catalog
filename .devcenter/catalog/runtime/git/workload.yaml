@@ -14,6 +14,7 @@ tasks:
 # wsl2: https://packages.chocolatey.org/wsl2.2.4.11.nupkg
 # wsl-ubuntu: https://packages.chocolatey.org/wsl-ubuntu-2204.22.4.0.20220819.nupkg
 # dotnetfx: https://packages.chocolatey.org/dotnetfx.4.8.0.20220524.nupkg
+# dotnet 4.5.2: https://packages.chocolatey.org/dotnetfx.4.5.2.0.nupkg
 # docker-desktop: https://packages.chocolatey.org/docker-desktop.4.38.0.nupkg
 
 
